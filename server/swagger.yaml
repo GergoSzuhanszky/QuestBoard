@@ -115,7 +115,7 @@ components:
           type: integer
     GameApplication:
       type: object
-      required: [playerId]
+      required: [playerId, form]
       properties:
         playerId:
           type: string
@@ -136,4 +136,3 @@ components:
                     type: string
                     description: Player's response to the question
                 required: [questionId, answer]
-          required: [answers]
