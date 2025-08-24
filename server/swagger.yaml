@@ -1,0 +1,139 @@
+openapi: 3.0.3
+info:
+  title: QuestBoard API
+  version: 1.0.0
+  description: API for finding and applying to TTRPG games
+
+servers:
+  - url: http://localhost:5000/api
+
+paths:
+  /games:
+    get:
+      summary: List all posted games
+      responses:
+        "200":
+          description: List of games
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Game"
+    post:
+      summary: Create a new game post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GameInput"
+      responses:
+        "201":
+          description: Game created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Game"
+
+  /games/{gameId}:
+    get:
+      summary: Get details of a game
+      parameters:
+        - in: path
+          name: gameId
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        "200":
+          description: Game details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Game"
+    post:
+      summary: Apply to join a game
+      parameters:
+        - in: path
+          name: gameId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/GameApplication"
+      responses:
+        "200":
+          description: Application successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Game"
+
+components:
+  schemas:
+    Game:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        maxPlayers:
+          type: integer
+        currentPlayers:
+          type: integer
+        ownerId:
+          type: string
+          format: uuid
+        playerIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+    GameInput:
+      type: object
+      required: [ownerId, name, description, maxPlayers]
+      properties:
+        ownerId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        maxPlayers:
+          type: integer
+    GameApplication:
+      type: object
+      required: [playerId]
+      properties:
+        playerId:
+          type: string
+          format: uuid
+        form:
+          type: object
+          description: Filled-out application form submitted by the player
+          properties:
+            answers:
+              type: array
+              items:
+                type: object
+                properties:
+                  questionId:
+                    type: string
+                    description: ID of the question being answered
+                  answer:
+                    type: string
+                    description: Player's response to the question
+                required: [questionId, answer]
+          required: [answers]
