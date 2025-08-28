@@ -26,7 +26,7 @@ const GameSchema = new mongoose.Schema(
     system: {
       type: String,
       enum: [
-        "D& 5e",
+        "D&D 5e",
         "Pathfinder",
         "Call of Cthulhu",
         "Daggerheart",

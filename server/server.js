@@ -7,6 +7,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 import connectDB from "./config/db.js";
+import router from "./routes/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,9 +18,7 @@ const swaggerDocument = YAML.load(path.join(__dirname, "swagger.yaml"));
 app.use(cors({ origin: "http://localhost:3000" })); // Allow React frontend
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Hello from Express server!");
-});
+app.use("/", router);
 
 dotenv.config();
 await connectDB();
